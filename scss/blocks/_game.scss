@@ -1,0 +1,317 @@
+
+// @use "../animations/game-drop-in";
+// @use "../animations/game-drop-out";
+// @use "../animations/swap-pulse";
+
+// .game {
+//   /* фон і базові розміри */
+//   background-image: image-set(
+//     url("/img/mainContainer/gameBg_1x.webp") 1x,
+//     url("/img/mainContainer/gameBg_2x.webp") 2x
+//   );
+//   background-repeat: no-repeat;
+//   background-size: contain;
+//   background-position: center;
+//   width: max(400px, 28vw);
+//   aspect-ratio: 538 / 550;
+//   z-index: 10;
+
+//   /* типографіка/адаптив (як у тебе було) */
+//   --vw-freeze-1100: calc(max(100vw, 1100px) / 100);
+//   font-size: clamp(12px, calc(1 * var(--vw-freeze-1100)), 18px);
+
+//   padding-block: clamp(14px, calc(14px + 4 * ((100vw - 1100px) / 820)), 18px) 2px;
+//   padding-inline: clamp(14px, calc(14px + 6 * ((100vw - 1100px) / 820)), 20px);
+
+//   /* таймінги та змінні анімацій */
+//   --step-out: 0.04s;       /* крок між картинками в колонці (OUT) */
+//   --step-in: 0.04s;        /* крок між картинками в колонці (IN)  */
+//   --dur: 0.36s;            /* тривалість падіння однієї картинки  */
+//   --col-gap: 0s;           /* дод. пауза між колонками поверх --dur */
+//   --ease: ease-in;
+//   --fall-out: 800%;
+//   --fall-in-start: -800%;
+//   --col-stagger: 0.08s;    /* інтервал старту між колонками */
+
+//   /* параметри свопу 7→9 */
+//   --swap-fade: 0.5s;             /* тривалість фейду 7-ки */
+//   --swap-pulse-duration: 0.8s;   /* тривалість «бампу» 7-ки */
+//   --swap-pulse-scale: 1.5;       /* масштаб «бампу» (див. модуль анімації) */
+
+//   /* сітка гри */
+//   &__container {
+//     position: relative;
+//     inline-size: 100%;
+//     block-size: 100%;
+//     display: grid;
+//     grid-template-columns: repeat(6, 1fr);
+//     overflow: hidden;
+//   }
+
+//   /* колонки */
+//   &__col {
+//     position: relative;
+//     display: flex;
+//     justify-content: center;
+//     flex-direction: column;
+//   }
+
+//   /* ====== КОЖНЕ <picture> — КВАДРАТНА КОМІРКА (фікс від “дригання”) ====== */
+//   &__col > picture {
+//     position: relative;
+//     display: block;
+//     width: 100%;
+//     aspect-ratio: 5 / 3.95;       /* фіксуємо висоту комірки відносно її ширини */
+//     overflow: visible;     /* щоб тіні/масштаб не обрізались */
+//   }
+
+//   /* БАЗОВІ ЗОБРАЖЕННЯ: завжди по центру, абсолютні, transform-тільки анімації */
+//   &__col > picture > img {
+//     position: absolute;
+//     left: 50%;
+//     top: 50%;
+//     width: 79%;
+//     height: auto;
+//     transform: translate(-50%, -50%) scale(1);
+//     transform-origin: center;
+//     display: block;
+//     object-fit: contain;
+//     will-change: transform, opacity;
+//     backface-visibility: hidden;
+//     pointer-events: none;
+//   }
+
+//   /* “бамп” 7-ки під час свопу — лише transform! */
+//   &__col > picture > img.is-bumping {
+//     animation: swap-pulse var(--swap-pulse-duration) ease-in 1 both;
+//   }
+
+//   /* ---------- КАСКАД ПАДІННЯ (OUT / IN) ---------- */
+
+//   /* OUT (початкові <picture>) */
+//   &.is-spun .game__col > picture.is-leaving {
+//     animation: game-drop-out var(--dur) var(--ease) forwards;
+//     animation-delay: var(--delay-out);
+//     pointer-events: none;
+//   }
+
+//   /* початкове положення для IN перед стартом */
+//   &.is-spun .game__col > picture.is-enter-pre {
+//     transform: translateY(var(--fall-in-start));
+//     opacity: 0;
+//   }
+
+//   /* IN (оновлені <picture>) */
+//   &.is-spun .game__col > picture.is-entering {
+//     animation: game-drop-in var(--dur) var(--ease) forwards;
+//     animation-delay: var(--delay-in);
+//     pointer-events: none;
+//   }
+
+//   /* ---------- СВOП 7→9 БЕЗ ДРИЖАННЯ (накладання всередині picture) ---------- */
+
+//   /* включаємо режим накладання: old/new у тій самій комірці, ідеально по центру */
+//   &__col > picture.swap-anim {
+//     /* нічого додаткового не треба — обидва <img> уже absolute і центруються однаково */
+//   }
+
+//   /* порядок шарів: спочатку 7 (old) зверху (щоб було видно “бамп”) */
+//   &__col > picture > img.swap-old {
+//     z-index: 2;
+//   }
+
+//   /* 9 (new) спочатку під 7 */
+//   &__col > picture > img.swap-new {
+//     z-index: 1;
+//   }
+
+//   /* коли піднімаємо 9 — просто міняємо шар (без зміни розмірів) */
+//   &__col > picture.swap-anim.swap-raise > img.swap-new {
+//     z-index: 3;
+//   }
+
+//   /* плавне згасання 7 — ЛИШЕ opacity (жодного рефлоу/перерахунку висоти) */
+//   &__col > picture > img.swap-old.fade-out {
+//     transition: opacity var(--swap-fade) linear;
+//     opacity: 0;
+//   }
+
+//   /* сумісність зі старими класами (лишив про всяк випадок) */
+//   &__swapOldFade { transition: opacity var(--swap-fade) linear; opacity: 0; }
+// }
+
+// @media (max-width: 576px) {
+//   .game {
+//     position: relative;
+//     left: 50%;
+//     transform: translate(-50%, 0);
+//     container-type: size;
+//     width: clamp(237px, calc(237px + 55 * ((100vw - 360px) / 216)), 292px);
+//     font-size: clamp(10px, 1cqw, 12px);
+//     padding-block: clamp(8px, calc(8px + (100vw - 360px) / 216), 9px) 1px;
+//     padding-inline: clamp(8px, calc(8px + (100vw - 360px) / 216), 9px);
+//     &__container {
+//       display: grid;
+//       align-content: center;
+//     }
+//   }
+// }
+
+
+@use "../animations/game-drop-in";
+@use "../animations/game-drop-out";
+@use "../animations/swap-pulse";
+
+.game {
+  /* фон і базові розміри */
+  background-image: image-set(
+    url("/img/mainContainer/gameBg_1x.webp") 1x,
+    url("/img/mainContainer/gameBg_2x.webp") 2x
+  );
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  width: max(400px, 28vw);
+  aspect-ratio: 538 / 550;
+  z-index: 10;
+
+  /* адаптив/типографіка */
+  --vw-freeze-1100: calc(max(100vw, 1100px) / 100);
+  font-size: clamp(12px, calc(1 * var(--vw-freeze-1100)), 18px);
+
+  padding-block: clamp(14px, calc(14px + 4 * ((100vw - 1100px) / 820)), 18px) 2px;
+  padding-inline: clamp(14px, calc(14px + 6 * ((100vw - 1100px) / 820)), 20px);
+
+  /* таймінги та змінні анімацій */
+  --step-out: 0.04s;       /* крок між картинками в колонці (OUT) */
+  --step-in: 0.04s;        /* крок між картинками в колонці (IN)  */
+  --dur: 0.36s;            /* тривалість падіння однієї картинки  */
+  --ease: ease-in;
+  --fall-out: 800%;
+  --fall-in-start: -800%;
+  --col-stagger: 0.08s;    /* інтервал старту між колонками */
+
+  /* параметри свопу 7→9 */
+  --swap-fade: 0.5s;             /* тривалість фейду 7-ки */
+  --swap-pulse-duration: 0.8s;   /* тривалість «бампу» 7-ки */
+  --swap-pulse-scale: 1.5;       /* масштаб «бампу» (див. модуль анімації) */
+
+  /* сітка гри */
+  &__container {
+    position: relative;
+    inline-size: 100%;
+    block-size: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    overflow: hidden;
+  }
+
+  /* колонки */
+  &__col {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  /* ====== КОЖНЕ <picture> — КВАДРАТНА КОМІРКА, WEBKIT-SAFE ====== */
+  &__col > picture {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 5 / 3.95;       /* фіксуємо висоту комірки */
+    overflow: visible;
+
+    /* Safari/WebKit: стабільний композитинг під час зміни src/srcset */
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    contain: paint;
+  }
+
+  /* БАЗОВІ ЗОБРАЖЕННЯ: завжди по центру, absolute, transform-тільки анімації */
+  &__col > picture > img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 79%;
+    height: auto;
+    transform: translate(-50%, -50%) scale(1);
+    transform-origin: center;
+    display: block;
+    object-fit: contain;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    // -webkit-transform: translateZ(0);
+    pointer-events: none;
+    image-rendering: auto;
+  }
+
+  /* “бамп” 7-ки під час свопу — лише transform! */
+  &__col > picture > img.is-bumping {
+    animation: swap-pulse var(--swap-pulse-duration) ease-in 1 both;
+  }
+
+  /* ---------- КАСКАД ПАДІННЯ (OUT / IN) ---------- */
+
+  /* OUT (початкові <picture>) */
+  &.is-spun .game__col > picture.is-leaving {
+    animation: game-drop-out var(--dur) var(--ease) forwards;
+    animation-delay: var(--delay-out);
+    pointer-events: none;
+  }
+
+  /* початкове положення для IN перед стартом */
+  &.is-spun .game__col > picture.is-enter-pre {
+    transform: translateY(var(--fall-in-start));
+    opacity: 0;
+  }
+
+  /* IN (оновлені <picture>) */
+  &.is-spun .game__col > picture.is-entering {
+    animation: game-drop-in var(--dur) var(--ease) forwards;
+    animation-delay: var(--delay-in);
+    pointer-events: none;
+  }
+
+  /* ---------- СВOП 7→9 БЕЗ ДРИЖАННЯ (накладання всередині picture) ---------- */
+
+  /* включаємо режим накладання: old/new у тій самій комірці */
+  &__col > picture.swap-anim {
+    /* обидва <img> вже absolute і центруються однаково */
+  }
+
+  /* порядок шарів: спочатку 7 (old) зверху (щоб було видно “бамп”) */
+  &__col > picture > img.swap-old { z-index: 2; }
+
+  /* 9 (new) спочатку під 7 */
+  &__col > picture > img.swap-new { z-index: 1; }
+
+  /* коли піднімаємо 9 — просто міняємо шар */
+  &__col > picture.swap-anim.swap-raise > img.swap-new { z-index: 3; }
+
+  /* плавне згасання 7 — ЛИШЕ opacity (жодного рефлоу) */
+  &__col > picture > img.swap-old.fade-out {
+    transition: opacity var(--swap-fade) linear;
+    opacity: 0;
+  }
+
+  /* сумісність зі старими класами (про всяк випадок) */
+  &__swapOldFade { transition: opacity var(--swap-fade) linear; opacity: 0; }
+}
+
+@media (max-width: 576px) {
+  .game {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+    container-type: size;
+    width: clamp(237px, calc(237px + 55 * ((100vw - 360px) / 216)), 292px);
+    font-size: clamp(10px, 1cqw, 12px);
+    padding-block: clamp(8px, calc(8px + (100vw - 360px) / 216), 9px) 1px;
+    padding-inline: clamp(8px, calc(8px + (100vw - 360px) / 216), 9px);
+
+    &__container { display: grid; align-content: center; }
+  }
+}

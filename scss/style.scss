@@ -1,0 +1,9 @@
+@use "./normalize.scss";
+@use "./reset.scss";
+@use "./fix-fouc";
+@use "./blocks/mainContainer";
+@use "./blocks/header";
+@use "./blocks/mainContent";
+@use "./blocks/game";
+@use "./blocks/footer";
+@use "./blocks/popup";

@@ -1,0 +1,158 @@
+@use "../animations/scaling";
+
+.mainContent {
+  flex: 1 1 auto;
+  min-height: 0;
+  position: relative;
+  z-index: 6;
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+  }
+  &__gameInfo {
+    width: clamp(
+      420px,
+      calc(420px + (69 * ((100vw - 1024px) / (1920 - 1024)))),
+      489px
+    );
+    margin-top: max(0px, calc((100vh - 612px) * 0.2));
+  }
+  &__gameInfoContainer {
+    margin-bottom: 10vh;
+  }
+  &__gameInfoContainerMobile{
+    display: none;
+  }
+  &__gameInfoImg {
+    & img {
+      width: clamp(89px, calc(8.333vw + 59px), 219px);
+      aspect-ratio: 92/71;
+    }
+  }
+  &__gameInfoText {
+    font-size: clamp(31px, calc(31px + 36 * ((100vw - 360px) / 1560)), 68px);
+    font-style: normal;
+    font-weight: 900;
+    line-height: 110%;
+    text-transform: uppercase;
+  }
+  &__gameInfoTextGameName {
+    background: linear-gradient(92deg, #f0b241 10.13%, #ffe7a6 97.74%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: clamp(31px, calc(31px + 36 * ((100vw - 360px) / 1560)), 68px);
+    font-style: normal;
+    line-height: 110%;
+    text-transform: uppercase;
+  }
+  &__game {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: clamp(0px, calc(16.3902439vw - 180.2926829px), 7vw);
+  }
+  &__btn {
+    display: flex;
+    inline-size: clamp(260px, calc(20.5 * var(--vw-freeze-1100)), 445px);
+    block-size: clamp(44px, calc(6 * var(--vw-freeze-1100)), 66px);
+    margin: 61px auto 0;
+    padding-block: 0;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 445px;
+    height: 66px;
+    border-radius: 6px;
+    background: #e5ff3a;
+    color: #2a2e0a;
+    text-transform: uppercase;
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1;
+    transition: transform 0.3s ease, background-color 0.2s ease, color 0.2s ease;
+    animation: scaling 1s linear infinite alternate;
+    will-change: transform; /* підказка браузеру для кращої продуктивності */
+    &:hover {
+      transform: scale(1.06);
+    }
+    &:active {
+      background: #d1ec26;
+      color: #14141a;
+    }
+    &[aria-disabled="true"] {
+      pointer-events: none;
+    }
+  }
+}
+
+/* Дбайливо до користувачів з вимкненою анімацією */
+@media (prefers-reduced-motion: reduce) {
+  .mainContent {
+    &__btn {
+      animation: none;
+    }
+  }
+}
+
+@media (max-width: 1023px) {
+  .mainContent {
+    &__container {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    &__gameInfo {
+      width: 100%;
+      margin-top: 0;
+    }
+    &__gameInfoImg{
+      text-align: center;
+    }
+    &__gameInfoContainer {
+      margin-bottom: 0;
+      display: none;
+    }
+    &__gameInfoContainerMobile{
+      display: block;
+      margin-bottom: 24px;
+    }
+    &__gameInfoText{
+      text-align: center;
+    }
+    &__btn {
+      margin: 38px auto 0;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .mainContent {
+    &__container {
+      padding-top: clamp(0%, calc((100vh - 640px) * (50 / 460)), 50%);
+    }
+    &__gameInfo {
+      width: 100%;
+      transform: none;
+      position: relative;
+      margin-bottom: clamp(16px, calc(16px + 22 * ((100vw - 360px) / 1560)), 38px);
+    }
+    &__game {
+      width: 100%;
+      height: 54dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+    }
+    &__btn {
+      inline-size: 86%;
+      block-size: 52px;
+      font-size: 18px;
+      margin-top: max(28px, 5.6vh);
+    }
+  }
+}

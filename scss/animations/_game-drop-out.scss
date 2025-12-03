@@ -1,0 +1,18 @@
+// @keyframes game-drop-out {
+//   from { transform: translateY(0);           opacity: 1; }
+//   to   { transform: translateY(800%); opacity: 0; }
+// }
+
+@keyframes game-drop-out {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  99% {
+    transform: translateY(var(--fall-out));
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

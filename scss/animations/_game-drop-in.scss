@@ -1,0 +1,18 @@
+// @keyframes game-drop-in {
+//   from { transform: translateY(-800%); opacity: 0; }
+//   to   { transform: translateY(0);                      opacity: 1; }
+// }
+
+@keyframes game-drop-in {
+  0% {
+    transform: translateY(var(--fall-in-start));
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+        opacity: 1;
+  }
+}

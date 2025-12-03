@@ -1,0 +1,125 @@
+@use "../animations/person-moving";
+@use "../animations/moneyRotating";
+
+.mainContainer { 
+  width: 100vw;
+  height: 100dvh;
+  padding-inline: clamp(16px, calc(16px + (64 * (100vw - 360px) / 1560)), 80px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-image: image-set(
+    url("/img/mainContainer/bg_1920_1x.webp") 1x,
+    url("/img/mainContainer/bg_1920_2x.webp") 2x
+  );
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  position: relative;
+  color: #fff;
+  font-family: "Sofia Sans", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  &__person {
+    position: absolute;
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    top: 65%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    width: 33vw;
+    pointer-events: none;
+    pointer-events: none;
+    animation: person-moving 4s linear 0s infinite normal both;
+    z-index: 2;
+  }
+  &__mainbgDecor {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    z-index: 1;
+  }
+  &__mainDecor2 {
+    position: absolute;
+    left: 50%;
+    bottom: 10%;
+    transform: translateX(-50%);
+    width: clamp(118px, calc(118px + 220 * ((100vw - 360px) / 1560)), 338px);
+    aspect-ratio: 338/328;
+    animation: money-rotating 4s ease-in-out 0s infinite normal both;
+    z-index: 3;
+  }
+  &__shadow {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    &--top {
+      top: 0;
+      display: none;
+    }
+    &--bottom {
+      bottom: 0;
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 1366px) {
+  .mainContainer {
+    background-image: image-set(
+      url("/img/mainContainer/bg_1366_1x.webp") 1x,
+      url("/img/mainContainer/bg_1366_2x.webp") 2x
+    );
+  }
+}
+@media (max-width: 1023px) {
+  .mainContainer {
+    &__person {
+      top: 70%;
+      left: -16%;
+      width: 48vw;
+    }
+    &__mainDecor2 {
+      left: 14%;
+      bottom: 14%;
+    }
+  }
+}
+@media (max-width: 576px) {
+  .mainContainer {
+    background-image: image-set(
+      url("/img/mainContainer/bg_576_1x.webp") 1x,
+      url("/img/mainContainer/bg_576_2x.webp") 2x
+    );
+    &__person {
+      right: initial;
+      top: initial;
+      bottom: -18%;
+      left: 0;
+      width: auto;
+      height: 78vh;
+      animation: none;
+      transform: none;
+    }
+    &__mainbgDecor {
+      width: 100%;
+      left: 0;
+    }
+    &__mainDecor2 {
+      left: 25%;
+      bottom: 18%;
+    }
+    &__shadow {
+      &--top {
+        display: block;
+        height: 44dvh;
+        width: 100%;
+      }
+    }
+  }
+}

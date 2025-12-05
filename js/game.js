@@ -497,7 +497,7 @@ export function initGame() {
   // 3) Клік — один спін
   btn.addEventListener("click", (e) => {
     e.preventDefault();
-    if (localStorage.getItem("game-spun") === "true") return;
+    // if (localStorage.getItem("game-spun") === "true") return;
     if (game.classList.contains("is-spun")) return;
 
     game.classList.add("is-spun");
@@ -524,13 +524,13 @@ export function initGame() {
   });
 
   // 4) Якщо вже крутили — одразу сигналізуємо
-  if (localStorage.getItem("game-spun") === "true") {
-    btn?.setAttribute("aria-disabled", "true");
-    btn?.setAttribute("disabled", "");
-    requestAnimationFrame(() =>
-      document.dispatchEvent(new CustomEvent("slot:bigwin"))
-    );
-  }
+  // if (localStorage.getItem("game-spun") === "true") {
+  //   btn?.setAttribute("aria-disabled", "true");
+  //   btn?.setAttribute("disabled", "");
+  //   requestAnimationFrame(() =>
+  //     document.dispatchEvent(new CustomEvent("slot:bigwin"))
+  //   );
+  // }
 }
 
 /* ================= helpers (внутрішні) ================= */
